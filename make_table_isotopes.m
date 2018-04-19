@@ -99,12 +99,12 @@ for loop_unstable_isotopes=[  1 0]%0  1
             end
         end
         if fast
-        nb_colors=16;
+            nb_colors=16;
         else
-                  nb_colors=512;
-  
+            nb_colors=512;
+            
         end
-        com_col=colormap(jet(nb_colors));
+        com_col=colormap(flipud(summer(nb_colors)));
         % com_col=colormap(copper(64));
         %  com_col=colormap('hsv');
         for loopi=1:size(com_col,1)
@@ -193,15 +193,15 @@ for loop_unstable_isotopes=[  1 0]%0  1
         disp(['Loop over ' num2str(size(s.A,1)) ' isotopes/spin'])
         for loopi=1:size(s.A,1)
             if loopi>50
-             %   drawnow
-             %   break
+                %   drawnow
+                %   break
             end
             if ignore(1,loopi)>0
                 tA=s.A(loopi,1)+1;
                 tN=s.N(loopi,1)+1;
                 disp(['Ignored a spin for ' num2str(tN-1) '' Per_tab{tA} ' (' num2str(loopi) ')' ])
             else
-               %set parameters
+                %set parameters
                 tmptxt=s.T10x2F2(loopi,:);
                 del='#VALUE!    ';
                 test=strcmp(tmptxt,del);
@@ -272,6 +272,7 @@ for loop_unstable_isotopes=[  1 0]%0  1
                         col='k';
                         filcol= filcol1;
                         coltxt='w';
+                        coltxt='k';
                         
                     else
                         col='k';
@@ -339,8 +340,8 @@ for loop_unstable_isotopes=[  1 0]%0  1
                     
                     %update...
                     
-                        axis(scale*[-1.5 105 -1 maxypos+1])
-                        
+                    axis(scale*[-1.5 105 -1 maxypos+1])
+                    
                     if switch_shift_y<2
                         
                         set(gca,'Ydir','reverse')
@@ -363,16 +364,16 @@ for loop_unstable_isotopes=[  1 0]%0  1
             for looopi=1:size( pos_x_table,2)
                 x=looopi-1;
                 for y=(pos_x_table(:,looopi)-1)'
-                
-                if y<1000
-                    text(scale*(x-corx),scale*(y-0.15+0.45),Per_tab{looopi},'HorizontalAlignment','center','VerticalAlignment','bottom','color','k','FontSize',fontsize);
-                    % line([x-0.5 x x+0.5],y+[0 -0.2 0]+0.5,'color','k','LineWidth',0.5);
-                    line(scale*[x-0.5 x x+0.5]-corx,scale*(y+[-0.0 -0.2 -0.0]+0.5),'color','k','LineWidth',0.5);
-                    dont_write(x+2,y+2)=1;% this is to avoid writing isotop text on the element text
-                  
-                                           pos_2d(x+2,y+2)=2;
-
-                end
+                    
+                    if y<1000
+                        text(scale*(x-corx),scale*(y-0.15+0.45),Per_tab{looopi},'HorizontalAlignment','center','VerticalAlignment','bottom','color','k','FontSize',fontsize);
+                        % line([x-0.5 x x+0.5],y+[0 -0.2 0]+0.5,'color','k','LineWidth',0.5);
+                        line(scale*[x-0.5 x x+0.5]-corx,scale*(y+[-0.0 -0.2 -0.0]+0.5),'color','k','LineWidth',0.5);
+                        dont_write(x+2,y+2)=1;% this is to avoid writing isotop text on the element text
+                        
+                        pos_2d(x+2,y+2)=2;
+                        
+                    end
                 end
             end
         end
@@ -394,9 +395,9 @@ for loop_unstable_isotopes=[  1 0]%0  1
                     %  line([x-0.5 x x+0.5],y+[-0.0 -0.2 -0.0]+0.5,'color','k','LineWidth',0.5);
                     line(scale*(x+[-0.0 -0.2 -0.0]+0.5)-corx,scale*[y-0.5 y y+0.5],'color','k','LineWidth',0.5);
                     dont_write(x+2,y+2)=1;% this is to avoid writing isotop text on the element text
-                                                               pos_2d(x+2,y+2)=2;
-                                                               pos_2d_non_aliased(x+2,y+2)=2;
-
+                    pos_2d(x+2,y+2)=2;
+                    pos_2d_non_aliased(x+2,y+2)=2;
+                    
                 end
             end
         end
@@ -412,11 +413,11 @@ for loop_unstable_isotopes=[  1 0]%0  1
             
             if x<1000
                 if switch_shift_y==0
-                                        y=1+mod(looopi-1,maxypos);
+                    y=1+mod(looopi-1,maxypos);
                     if pos_2d(x+2-1,y+2-1)==0
-                    
-                    text(scale*(x-0.5-0.25)-corx,scale*(y-1),num2str(looopi-1),'HorizontalAlignment','right','VerticalAlignment','middle','color','k','FontSize',fontsize2);
-                    line(scale*([x x-0.2 x]-0.5)-corx,scale*(y+[-0.5 -0.0 0.5]-1),'color','k','LineWidth',0.5);
+                        
+                        text(scale*(x-0.5-0.25)-corx,scale*(y-1),num2str(looopi-1),'HorizontalAlignment','right','VerticalAlignment','middle','color','k','FontSize',fontsize2);
+                        line(scale*([x x-0.2 x]-0.5)-corx,scale*(y+[-0.5 -0.0 0.5]-1),'color','k','LineWidth',0.5);
                     else
                         disp(['no isotop label for ' num2str(looopi-1) 'because already somehting in this place:' num2str(pos_2d(x+2-1,y+2-1)) ' ' num2str(x) ' ' num2str(y)])
                     end
@@ -442,53 +443,53 @@ for loop_unstable_isotopes=[  1 0]%0  1
                 
             end
         end
-                 if switch_shift_y==2
-
-                for looopi=1:size( pos_2d_non_aliased,1)-2
-
-                                x=(looopi);
-                                tmp=pos_2d_non_aliased(x+2,:);
-                                tt=find(tmp==1);
-                                if size(tt,2)>0
-                                    %%% above 
-                                    pos=size(tt,2);
-                                    yo=tt(1,pos)-2;
-                                    
-                                    y=mod(yo-1,maxypos)+1;
-                                    if y==yo
-                                        corx=0;
-                                    else
-                                        corx=scale*shiftx;
-                                    end
-                                    if pos_2d_non_aliased(x+2,y+2+1)==0
-                                        text(scale*(x-corx),scale*(y   +0.15+0.45),num2str(looopi-1+1),'HorizontalAlignment','center','VerticalAlignment','bottom','color','k','FontSize',fontsize);
-                                        % line([x-0.5 x x+0.5],y+[0 -0.2 0]+0.5,'color','k','LineWidth',0.5);
-                                        line(scale*[x-0.5 x x+0.5]-corx,scale*(y    -[-0.0 -0.2 -0.0]+0.5),'color','k','LineWidth',0.5);
-                                        
-                                        %      text(scale*(x-0.5-0.25+0.1)-corx,scale*(y-1+1.15),num2str(looopi-1),'HorizontalAlignment','right','VerticalAlignment','bottom','color','k','FontSize',fontsize2);
-                                        %     line(scale*([x x-0.2 ]-0.5)-corx,scale*(y+[0.5 0.5+0.2]-1),'color','k','LineWidth',0.5);
-                                    end
-                                     %%% below 
-                                    pos=1;
-                                    yo=tt(1,pos)-2;
-                                    
-                                    y=mod(yo-1,maxypos)+1;
-                                    if y==yo
-                                        corx=0;
-                                    else
-                                        corx=scale*shiftx;
-                                    end
-                                    if pos_2d_non_aliased(x+2,y+2-1)==0
-                                        text(scale*(x-corx),scale*(y   -0.15-0.45),num2str(looopi-1+1),'HorizontalAlignment','center','VerticalAlignment','top','color','k','FontSize',fontsize);
-                                        % line([x-0.5 x x+0.5],y+[0 -0.2 0]+0.5,'color','k','LineWidth',0.5);
-                                        line(scale*[x-0.5 x x+0.5]-corx,scale*(y    +[-0.0 -0.2 -0.0]-0.5),'color','k','LineWidth',0.5);
-                                        
-                                        %      text(scale*(x-0.5-0.25+0.1)-corx,scale*(y-1+1.15),num2str(looopi-1),'HorizontalAlignment','right','VerticalAlignment','bottom','color','k','FontSize',fontsize2);
-                                        %     line(scale*([x x-0.2 ]-0.5)-corx,scale*(y+[0.5 0.5+0.2]-1),'color','k','LineWidth',0.5);
-                                    end
-                                end
-         end
-    end
+        if switch_shift_y==2
+            
+            for looopi=1:size( pos_2d_non_aliased,1)-2
+                
+                x=(looopi);
+                tmp=pos_2d_non_aliased(x+2,:);
+                tt=find(tmp==1);
+                if size(tt,2)>0
+                    %%% above
+                    pos=size(tt,2);
+                    yo=tt(1,pos)-2;
+                    
+                    y=mod(yo-0,maxypos)+0;
+                    if y==yo
+                        corx=0;
+                    else
+                        corx=scale*shiftx;
+                    end
+                    if pos_2d_non_aliased(x+2,y+2+1)==0
+                        text(scale*(x-corx),scale*(y   +0.15+0.45),num2str(looopi-1+1),'HorizontalAlignment','center','VerticalAlignment','bottom','color','k','FontSize',fontsize);
+                        % line([x-0.5 x x+0.5],y+[0 -0.2 0]+0.5,'color','k','LineWidth',0.5);
+                        line(scale*[x-0.5 x x+0.5]-corx,scale*(y    -[-0.0 -0.2 -0.0]+0.5),'color','k','LineWidth',0.5);
+                        
+                        %      text(scale*(x-0.5-0.25+0.1)-corx,scale*(y-1+1.15),num2str(looopi-1),'HorizontalAlignment','right','VerticalAlignment','bottom','color','k','FontSize',fontsize2);
+                        %     line(scale*([x x-0.2 ]-0.5)-corx,scale*(y+[0.5 0.5+0.2]-1),'color','k','LineWidth',0.5);
+                    end
+                    %%% below
+                    pos=1;
+                    yo=tt(1,pos)-2;
+                    
+                    y=mod(yo-1,maxypos)+1;
+                    if y==yo
+                        corx=0;
+                    else
+                        corx=scale*shiftx;
+                    end
+                    if pos_2d_non_aliased(x+2,y+2-1)==0
+                        text(scale*(x-corx),scale*(y   -0.15-0.45),num2str(looopi-1+1),'HorizontalAlignment','center','VerticalAlignment','top','color','k','FontSize',fontsize);
+                        % line([x-0.5 x x+0.5],y+[0 -0.2 0]+0.5,'color','k','LineWidth',0.5);
+                        line(scale*[x-0.5 x x+0.5]-corx,scale*(y    +[-0.0 -0.2 -0.0]-0.5),'color','k','LineWidth',0.5);
+                        
+                        %      text(scale*(x-0.5-0.25+0.1)-corx,scale*(y-1+1.15),num2str(looopi-1),'HorizontalAlignment','right','VerticalAlignment','bottom','color','k','FontSize',fontsize2);
+                        %     line(scale*([x x-0.2 ]-0.5)-corx,scale*(y+[0.5 0.5+0.2]-1),'color','k','LineWidth',0.5);
+                    end
+                end
+            end
+        end
         
         drawnow
         disp('Rescale')
@@ -549,7 +550,7 @@ for loop_unstable_isotopes=[  1 0]%0  1
         end
         disp('end of dump file')
         toc
-
+        
     end
 end
 
