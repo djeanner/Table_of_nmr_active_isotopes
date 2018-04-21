@@ -7,14 +7,14 @@
 clear all
 close all
 scale=1;
-fast=0;
+fast=1;
 shiftx=scale*60;% this is how much shift second part of n/z chart
 %for switch_shift_y=[0 1 2]
 % % for resol=[0 600]
 % % for loop_unstable_isotopes=[ 0:1]
 % %     for switch_shift_y=[ 0:2]
 for loop_unstable_isotopes=[0  1 ]%0  1
-    for switch_shift_y=[0 1 2]% 0 1 2
+    for switch_shift_y=[1 ]% 0 1 2
         clear pos_2d
         clear pos_2d_non_aliased
         disp('Initialize')
@@ -48,8 +48,8 @@ for loop_unstable_isotopes=[0  1 ]%0  1
             tab_shiftx=[0 16 32 0 ];
             maxypos=42;%nb cell vertical... used for modulo
             tab_shiftx=[0 6 12-6 18-10 0];
-             maxypos=48;%nb cell vertical... used for modulo
-            tab_shiftx=[0 8+1 16+1 24+1 32+1 0];
+             maxypos=42;%nb cell vertical... used for modulo
+            tab_shiftx=[0 6 12-6 18-10 0];
             
         end
         if switch_shift_y==2
