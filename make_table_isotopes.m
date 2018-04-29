@@ -105,9 +105,11 @@ end
             'Yb','Lu','Hf','Ta','W','Re','Os','Ir','Pt','Au','Hg','Tl','Pb','Bi','Po','At','Rn','Fr','Ra','Ac','Th','Pa','U','Np','Pu','Am','Cm','Bk','Cf','Es','Fm','Md','No','Lr',...
             'Rf'};
         if switch_shift_y<2
-            pos_x_table=10000*ones(2,size(Per_tab,2));
+            pos_x_table_above=10000*ones(4,size(Per_tab,2));
+            pos_x_table_below=-10000*ones(4,size(Per_tab,2));
         else
-            pos_x_table=10000*ones(2,size(s.A,1));
+            pos_x_table_above=10000*ones(4,size(s.A,1));
+            pos_x_table_below=-10000*ones(4,size(s.A,1));
             
         end
         %if switch_shift_y==0
@@ -366,24 +368,47 @@ end
                         text(scale*x-corx,scale*y,txt,'HorizontalAlignment','center','FontSize',fontsize,'color',coltxt);
                         
                         
-                        if pos_x_table(1,x+1)>y
-                            if pos_x_table(1,x+1)>1000
-                                pos_x_table(1,x+1)=y;
-                                                        pos_x_table(3,x+1)=corx;
-
+                        if pos_x_table_above(1,x+1)>y
+                            if pos_x_table_above(1,x+1)>1000
+                                pos_x_table_above(1,x+1)=y;
+                                                        pos_x_table_above(3,x+1)=corx;
+                                                        
                             else
-                                if abs(pos_x_table(1,x+1)-y)>(maxypos/2) % store two values...
-                                    pos_x_table(2,x+1)=pos_x_table(1,x+1);
-                                                            pos_x_table(4,x+1)=corxn;
-
+                                if abs(pos_x_table_above(1,x+1)-y)>(maxypos/2) % store two values...
+                                    pos_x_table_above(2,x+1)=pos_x_table_above(1,x+1);
+                                    pos_x_table_above(4,x+1)=corxn;
+                                    
                                 end
-                                pos_x_table(1,x+1)=y;
-                                                        pos_x_table(3,x+1)=corx;
-
+                                pos_x_table_above(1,x+1)=y;
+                                pos_x_table_above(3,x+1)=corx;
+                                
                             end
                         end
+                        if pos_x_table_below(1,x+1)<1000
+                            pos_x_table_below(1,x+1)=y;
+                            pos_x_table_below(3,x+1)=corx;
+                        end
                         
-                        
+                        if abs(pos_x_table_below(1,x+1)-y)>(maxypos/2) % store two values...
+                            if pos_x_table_below(2,x+1)<y
+                                pos_x_table_below(2,x+1)=y;
+                                pos_x_table_below(4,x+1)=corx;
+                            end
+                        else
+                            if pos_x_table_below(1,x+1)<y
+                                pos_x_table_below(1,x+1)=y;
+                                pos_x_table_below(3,x+1)=corx;
+                            end
+                            
+                            %   pos_x_table_below(2,x+1)=pos_x_tapos_x_table_belowble_above(1,x+1);
+                            %  pos_x_table_below(4,x+1)=corxn;
+                            
+                        end
+%                                 pos_x_table_below(1,x+1)=y;
+%                                 pos_x_table_below(3,x+1)=corx;
+%                                 
+%                             end
+%                         end
                         if pos_iso(1,y_orig+1)>x
                             pos_iso(y_orig+1)=x;
                         end
@@ -428,11 +453,11 @@ end
         %display Element
         if switch_shift_y<2
             
-            for looopi=1:size( pos_x_table,2)
+            for looopi=1:size( pos_x_table_above,2)
                 x=looopi-1;
                 for indi=1:2
-                 y=(pos_x_table(indi,looopi)-1)';
-                    corx=pos_x_table(2+indi,looopi);
+                 y=(pos_x_table_above(indi,looopi)-1)';
+                    corx=pos_x_table_above(2+indi,looopi);
 %                                                             shiftx=tab_shiftx(1,1+round((yo-y)/maxypos));
 % 
 %                 if y==yo
@@ -442,15 +467,37 @@ end
 %                 end
                   %   corx=0;
 
-                    if y<1000
-                        text(scale*(x-corx),scale*(y-0.15+0.45),Per_tab{looopi},'HorizontalAlignment','center','VerticalAlignment','bottom','color','k','FontSize',fontsize);
-                        % line([x-0.5 x x+0.5],y+[0 -0.2 0]+0.5,'color','k','LineWidth',0.5);
-                        line(scale*[x-0.5 x x+0.5]-corx,scale*(y+[-0.0 -0.2 -0.0]+0.5),'color','k','LineWidth',0.5);
-                        dont_write(x+2,y+2)=1;% this is to avoid writing isotop text on the element text
-                        
-                        pos_2d(x+2,y+2)=2;
-                        
-                    end
+                  if y<1000
+                      text_above(x+2,y+1,scale,corx,fontsize,Per_tab{looopi})
+                      dont_write(x+2,y+2)=1;% this is to avoid writing isotop text on the element text
+                      pos_2d(x+2,y+2)=2;
+                      
+                      
+                  end
+                end
+                for indi=1:2
+                 y=(pos_x_table_below(indi,looopi)-1)';
+                    corx=pos_x_table_below(2+indi,looopi);
+%                                                             shiftx=tab_shiftx(1,1+round((yo-y)/maxypos));
+% 
+%                 if y==yo
+%                     corx=0;
+%                 else
+%                     corx=scale*shiftx;
+%                 end
+                  %   corx=0;
+
+                  if y>-1000
+                    
+                      
+                      
+                      text_below(x+2,y+1,scale,corx,fontsize,num2str(looopi-1))
+                    %  if y>0
+                      dont_write(x+2,y+4*1)=1;% this is to avoid writing isotop text on the element text
+                      pos_2d(x+2,y+4*1)=2;
+                   %   end
+                      
+                  end
                 end
             end
         end
