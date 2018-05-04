@@ -13,11 +13,8 @@ shiftx=scale*60;% this is how much shift second part of n/z chart
 % % for resol=[0 600]
 % % for loop_unstable_isotopes=[ 0:1]
 % %     for switch_shift_y=[ 0:2]
-<<<<<<< HEAD
 for loop_unstable_isotopes=[  1 0]%0  1
-=======
-for loop_unstable_isotopes=[0  1 ]%0  1
->>>>>>> 3ea4f53ea0351019a9b54a493db861e60768511c
+
     for switch_shift_y=[0 1 2]% 0 1 2
         clear pos_2d
         clear pos_2d_non_aliased
@@ -557,7 +554,7 @@ end
                         text(scale*(x-0.5-0.25)-corx,scale*(y-1),num2str(looopi-1),'HorizontalAlignment','right','VerticalAlignment','middle','color','k','FontSize',fontsize2);
                         line(scale*([x x-0.2 x]-0.5)-corx,scale*(y+[-0.5 -0.0 0.5]-1),'color','k','LineWidth',0.5);
                     else
-                        disp(['no isotop label for ' num2str(looopi-1) 'because already somehting in this place:' num2str(pos_2d(x+2-1,y+2-1)) ' ' num2str(x) ' ' num2str(y)])
+                        disp(['no isotope label for ' num2str(looopi-1) 'because already something written in this location:' num2str(pos_2d(x+2-1,y+2-1)) ' ' num2str(x) ' ' num2str(y)])
                     end
                 end
                 if switch_shift_y==1
