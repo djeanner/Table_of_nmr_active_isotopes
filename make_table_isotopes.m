@@ -13,29 +13,52 @@ shiftx=scale*60;% this is how much shift second part of n/z chart
 % % for resol=[0 600]
 % % for loop_unstable_isotopes=[ 0:1]
 % %     for switch_shift_y=[ 0:2]
+<<<<<<< HEAD
 for loop_unstable_isotopes=[  1 0]%0  1
+=======
+for loop_unstable_isotopes=[0  1 ]%0  1
+>>>>>>> 3ea4f53ea0351019a9b54a493db861e60768511c
     for switch_shift_y=[0 1 2]% 0 1 2
         clear pos_2d
         clear pos_2d_non_aliased
         disp('Initialize')
         if switch_shift_y==0
+            txth='Z';
+            txtv='A';
+            
             type='Z_A_chart';
             fontsize=3.5;
+            fontsize2=fontsize;
             
             maxypos=64;%nb cell vertical... used for modulo
-            fontsize2=fontsize;
+            
+            tab_shiftx=[0 10+2 20 30-1 0];
+           maxypos=51;%nb cell vertical... used for modulo
+           tab_shiftx=6*[0 1 2 3 4 5 6 7];
+           tab_shiftx=[0 5+1 10 15-1 20-5 25-8 0];
             
         end
         if switch_shift_y==1
+            txth='Z';
+            txtv='N';
             type='Z_N_chart';
             
             fontsize=3.5;
             
             fontsize2=fontsize-0.5;
             
+            
             maxypos=66;%nb cell vertical... used for modulo
+            tab_shiftx=[0 16 32 0 ];
+            maxypos=42;%nb cell vertical... used for modulo
+            tab_shiftx=[0 6 12-6 18-10 0];
+             maxypos=48;%nb cell vertical... used for modulo
+            tab_shiftx=[0 8+1 16+1 24+1 32+1 0];
+            
         end
         if switch_shift_y==2
+              txth='N';
+            txtv='Z';
             type='N_Z_chart';
             
             fontsize=1.5;
@@ -45,10 +68,38 @@ for loop_unstable_isotopes=[  1 0]%0  1
             fontsize2=fontsize-0.5;
             
             maxypos=64;%nb cell vertical... used for modulo
+                                                            tab_shiftx=[0 60 0 ];
+
         end
+
         figure(switch_shift_y+1);clf;drawnow;hold on
         tic
-        
+        if switch_shift_y==0
+                    origin=[-0.5 0.5];
+        else
+                    origin=[-0.5 -0.5];
+        end
+                    length_arrows_origin=4;
+                    oi=0.5/2;
+                    oa=0.2;
+                    lwar=1;
+                    %line of arrow
+                    plot([origin(1,1) origin(1,1)],[origin(1,2) origin(1,2)+length_arrows_origin],'k-','LineWidth',lwar*scale);hold on
+                    plot([origin(1,1) origin(1,1)+length_arrows_origin ],[origin(1,2) origin(1,2)],'k-','LineWidth',lwar*scale);hold on
+                   %tip arrow
+                    plot([origin(1,1)+oi origin(1,1) origin(1,1)-oi],length_arrows_origin+origin(1,2)+[ -oa 0 -oa],'k-','LineWidth',lwar*scale);hold on
+                    plot(length_arrows_origin+origin(1,2)+[ -oa 0 -oa],[origin(1,1)+oi origin(1,1) origin(1,1)-oi],'k-','LineWidth',lwar*scale);hold on
+%text
+
+little_space_between_top_arrow_and_txt=0.1;
+fontsizea=fontsize*1.2;
+    text(origin(1,1)+length_arrows_origin+little_space_between_top_arrow_and_txt,origin(1,2),txth,'HorizontalAlignment','left','VerticalAlignment','middle','color','k','FontSize',fontsizea)
+if switch_shift_y==2
+    text(origin(1,1),origin(1,2)+length_arrows_origin+little_space_between_top_arrow_and_txt,txtv,'HorizontalAlignment','center','VerticalAlignment','bottom','color','k','FontSize',fontsizea)
+else
+      text(origin(1,1),origin(1,2)+length_arrows_origin+little_space_between_top_arrow_and_txt,txtv,'HorizontalAlignment','center','VerticalAlignment','top','color','k','FontSize',fontsizea)
+  
+end
         set(gcf,'color','w');
         disp('Read data')
         toc
@@ -58,9 +109,11 @@ for loop_unstable_isotopes=[  1 0]%0  1
             'Yb','Lu','Hf','Ta','W','Re','Os','Ir','Pt','Au','Hg','Tl','Pb','Bi','Po','At','Rn','Fr','Ra','Ac','Th','Pa','U','Np','Pu','Am','Cm','Bk','Cf','Es','Fm','Md','No','Lr',...
             'Rf'};
         if switch_shift_y<2
-            pos_x_table=10000*ones(2,size(Per_tab,2));
+            pos_x_table_above=10000*ones(4,size(Per_tab,2));
+            pos_x_table_below=-10000*ones(4,size(Per_tab,2));
         else
-            pos_x_table=10000*ones(2,size(s.A,1));
+            pos_x_table_above=10000*ones(4,size(s.A,1));
+            pos_x_table_below=-10000*ones(4,size(s.A,1));
             
         end
         %if switch_shift_y==0
@@ -244,11 +297,13 @@ for loop_unstable_isotopes=[  1 0]%0  1
                     y=y-x;
                 end
                 corx=0;
-                
+                corxn=0;
                 if switch_shift_y==2
                     x=x-y;
                     yo=y;
                     y=mod(y,maxypos);
+                                                            shiftx=tab_shiftx(1,1+round((yo-y)/maxypos));
+
                     if y==yo
                         
                         corx=0;
@@ -257,7 +312,17 @@ for loop_unstable_isotopes=[  1 0]%0  1
                         
                     end
                 else
+                    yo=y;
                     y=mod(y,maxypos);
+                    
+                    shiftx=tab_shiftx(1,1+round((yo-y)/maxypos));
+                    corx=scale*shiftx;
+                     if (-1+ 1+round((yo-y)/maxypos))>0
+                      shiftx=tab_shiftx(1, -1+ 1+round((yo-y)/maxypos));
+                     end
+                    corxn=scale*shiftx;
+                    
+                    
                 end
                 if size(spin,2)>0
                     pos1_64=1+round((nb_colors-1)*abs(nu/spin)/maxnu);
@@ -305,18 +370,49 @@ for loop_unstable_isotopes=[  1 0]%0  1
                             end
                         end
                         text(scale*x-corx,scale*y,txt,'HorizontalAlignment','center','FontSize',fontsize,'color',coltxt);
-                        if pos_x_table(1,x+1)>y
-                            if pos_x_table(1,x+1)>1000
-                                pos_x_table(1,x+1)=y;
+                        
+                        
+                        if pos_x_table_above(1,x+1)>y
+                            if pos_x_table_above(1,x+1)>1000
+                                pos_x_table_above(1,x+1)=y;
+                                                        pos_x_table_above(3,x+1)=corx;
+                                                        
                             else
-                                if abs(pos_x_table(1,x+1)-y)>(maxypos/2) % store two values...
-                                    pos_x_table(2,x+1)=pos_x_table(1,x+1);
+                                if abs(pos_x_table_above(1,x+1)-y)>(maxypos/2) % store two values...
+                                    pos_x_table_above(2,x+1)=pos_x_table_above(1,x+1);
+                                    pos_x_table_above(4,x+1)=corxn;
+                                    
                                 end
-                                pos_x_table(1,x+1)=y;
+                                pos_x_table_above(1,x+1)=y;
+                                pos_x_table_above(3,x+1)=corx;
+                                
                             end
                         end
+                        if pos_x_table_below(1,x+1)<1000
+                            pos_x_table_below(1,x+1)=y;
+                            pos_x_table_below(3,x+1)=corx;
+                        end
                         
-                        
+                        if abs(pos_x_table_below(1,x+1)-y)>(maxypos/2) % store two values...
+                            if pos_x_table_below(2,x+1)<y
+                                pos_x_table_below(2,x+1)=y;
+                                pos_x_table_below(4,x+1)=corx;
+                            end
+                        else
+                            if pos_x_table_below(1,x+1)<y
+                                pos_x_table_below(1,x+1)=y;
+                                pos_x_table_below(3,x+1)=corx;
+                            end
+                            
+                            %   pos_x_table_below(2,x+1)=pos_x_tapos_x_table_belowble_above(1,x+1);
+                            %  pos_x_table_below(4,x+1)=corxn;
+                            
+                        end
+%                                 pos_x_table_below(1,x+1)=y;
+%                                 pos_x_table_below(3,x+1)=corx;
+%                                 
+%                             end
+%                         end
                         if pos_iso(1,y_orig+1)>x
                             pos_iso(y_orig+1)=x;
                         end
@@ -361,19 +457,51 @@ for loop_unstable_isotopes=[  1 0]%0  1
         %display Element
         if switch_shift_y<2
             
-            for looopi=1:size( pos_x_table,2)
+            for looopi=1:size( pos_x_table_above,2)
                 x=looopi-1;
-                for y=(pos_x_table(:,looopi)-1)'
+                for indi=1:2
+                 y=(pos_x_table_above(indi,looopi)-1)';
+                    corx=pos_x_table_above(2+indi,looopi);
+%                                                             shiftx=tab_shiftx(1,1+round((yo-y)/maxypos));
+% 
+%                 if y==yo
+%                     corx=0;
+%                 else
+%                     corx=scale*shiftx;
+%                 end
+                  %   corx=0;
+
+                  if y<1000
+                      text_above(x+2,y+1,scale,corx,fontsize,Per_tab{looopi})
+                      dont_write(x+2,y+2)=1;% this is to avoid writing isotop text on the element text
+                      pos_2d(x+2,y+2)=2;
+                      
+                      
+                  end
+                end
+                for indi=1:2
+                 y=(pos_x_table_below(indi,looopi)-1)';
+                    corx=pos_x_table_below(2+indi,looopi);
+%                                                             shiftx=tab_shiftx(1,1+round((yo-y)/maxypos));
+% 
+%                 if y==yo
+%                     corx=0;
+%                 else
+%                     corx=scale*shiftx;
+%                 end
+                  %   corx=0;
+
+                  if y>-1000
                     
-                    if y<1000
-                        text(scale*(x-corx),scale*(y-0.15+0.45),Per_tab{looopi},'HorizontalAlignment','center','VerticalAlignment','bottom','color','k','FontSize',fontsize);
-                        % line([x-0.5 x x+0.5],y+[0 -0.2 0]+0.5,'color','k','LineWidth',0.5);
-                        line(scale*[x-0.5 x x+0.5]-corx,scale*(y+[-0.0 -0.2 -0.0]+0.5),'color','k','LineWidth',0.5);
-                        dont_write(x+2,y+2)=1;% this is to avoid writing isotop text on the element text
-                        
-                        pos_2d(x+2,y+2)=2;
-                        
-                    end
+                      
+                      
+                      text_below(x+2,y+1,scale,corx,fontsize,num2str(looopi-1))
+                    %  if y>0
+                      dont_write(x+2,y+4*1)=1;% this is to avoid writing isotop text on the element text
+                      pos_2d(x+2,y+4*1)=2;
+                   %   end
+                      
+                  end
                 end
             end
         end
@@ -383,6 +511,8 @@ for loop_unstable_isotopes=[  1 0]%0  1
                 
                 yo=looopi-1;
                 y=(mod(looopi-1,maxypos));
+                                                            shiftx=tab_shiftx(1,1+round((yo-y)/maxypos));
+
                 if y==yo
                     corx=0;
                 else
@@ -413,7 +543,15 @@ for loop_unstable_isotopes=[  1 0]%0  1
             
             if x<1000
                 if switch_shift_y==0
+                    yo=looopi-1;
                     y=1+mod(looopi-1,maxypos);
+                      shiftx=tab_shiftx(1,1+round((yo+1-y)/maxypos));
+
+                if y==yo
+                    corx=0;
+                else
+                    corx=scale*shiftx;
+                end
                     if pos_2d(x+2-1,y+2-1)==0
                         
                         text(scale*(x-0.5-0.25)-corx,scale*(y-1),num2str(looopi-1),'HorizontalAlignment','right','VerticalAlignment','middle','color','k','FontSize',fontsize2);
@@ -425,6 +563,14 @@ for loop_unstable_isotopes=[  1 0]%0  1
                 if switch_shift_y==1
                     
                     y=1+mod(looopi-1-x,maxypos);
+                    yo=looopi-1-x;
+                    shiftx=tab_shiftx(1,1+round((yo-y)/maxypos));
+
+                if y==yo
+                    corx=0;
+                else
+                    corx=scale*shiftx;
+                end
                     %bottom left
                     if dont_write(x+2 -1,y+2 )==0
                         
@@ -434,6 +580,14 @@ for loop_unstable_isotopes=[  1 0]%0  1
                     %top right
                     x=pos_iso2(looopi);
                     y=1+mod(looopi-1-x,maxypos);
+                     yo=looopi-1-x;
+                    shiftx=tab_shiftx(1,1+round((yo-y)/maxypos));
+
+                if y==yo
+                    corx=0;
+                else
+                    corx=scale*shiftx;
+                end
                     if dont_write(x+2 +1,y+2 -2)==0
                         
                         text(scale*(x+0.5+0.25-0.1)-corx,scale*(y-1-1.15),num2str(looopi-1),'HorizontalAlignment','left','VerticalAlignment','top','color','k','FontSize',fontsize2);
@@ -456,6 +610,7 @@ for loop_unstable_isotopes=[  1 0]%0  1
                     yo=tt(1,pos)-2;
                     
                     y=mod(yo-0,maxypos)+0;
+                                                            shiftx=tab_shiftx(1,1+round((yo-y)/maxypos));
                     if y==yo
                         corx=0;
                     else
@@ -474,6 +629,12 @@ for loop_unstable_isotopes=[  1 0]%0  1
                     yo=tt(1,pos)-2;
                     
                     y=mod(yo-1,maxypos)+1;
+                    if yo>0
+                                                            shiftx=tab_shiftx(1,1+round((yo-y)/maxypos));
+                    else
+                       shiftx=0; 
+                    end
+
                     if y==yo
                         corx=0;
                     else
@@ -496,20 +657,18 @@ for loop_unstable_isotopes=[  1 0]%0  1
         toc
         drawnow
         
-        if switch_shift_y==2
-            %    axis([-1.5 270 -1 maxypos+1])
+        
             axis(scale*[-1.5 105 -1 maxypos+1])
+          %  axis(scale*[-5 10 -5 10])
             
-        else
-            axis(scale*[-1.5 105 -1 maxypos+1])
-            
-        end
+        
         axis off
         if switch_shift_y<2
             
             set(gca,'Ydir','reverse')
         end
         axis('equal')
+        
         si=[ 42.0 29.7 ]-1*2;%for A3 with 1 cm margin at both sides
         set(gcf, 'PaperUnits', 'centimeters');
         set(gcf, 'PaperSize', si);
@@ -550,7 +709,8 @@ for loop_unstable_isotopes=[  1 0]%0  1
         end
         disp('end of dump file')
         toc
-        
+          %      fzuk
+
     end
 end
 
