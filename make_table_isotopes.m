@@ -14,7 +14,7 @@ shiftx=scale*60;% this is how much shift second part of n/z chart
 % % for loop_unstable_isotopes=[ 0:1]
 % %     for switch_shift_y=[ 0:2]
 for loop_unstable_isotopes=[  1 0]%0  1
-    for switch_shift_y=[2 1 0 ]% 0 1 2
+    for switch_shift_y=[0 1 2]% 0 1 2
         clear pos_2d
         clear pos_2d_non_aliased
         disp('Initialize')
